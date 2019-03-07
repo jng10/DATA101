@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<title>MC 2018 Opioid Crimes</title>
+</head>
+
+<body>
+
+
+<p>MC 2018 Opioid Crimes
+This data was downloaded off of data.montgomerycountymd.gov
+The following will show the dataset before and after cleaning.</p>
+
+<!--begin.rcode
+library(readxl)
+Opioid_Crime_Incidents_Jan_1_2017_Present <- read_excel("Opioid_Crime_Incidents__Jan_1_2017-Present.xlsx")
+library(dplyr)
+head(Opioid_Crime_Incidents_Jan_1_2017_Present)
+tail(Opioid_Crime_Incidents_Jan_1_2017_Present)
+str(Opioid_Crime_Incidents_Jan_1_2017_Present)
+end.rcode-->
+
+<!--begin.rcode
+MCOpioid <- select(Opioid_Crime_Incidents_Jan_1_2017_Present, "Incident ID", "Offence Code", "Crime Name3", "Zip Code", "Start Date/Time")
+MCOpioid
+MCOpioid <- rename(MCOpioid, Year = "Start Date/Time", Crime = "Crime Name3")
+MCOpioid
+MCOpioid <- mutate(MCOpioid, Year = format(MCOpioid$'Year', format = "%Y"))
+MCOpioid
+MCOpioid <- filter(MCOpioid, Year == 2018)
+MCOpioid
+end.rcode-->
+
+</body>
+</html>
