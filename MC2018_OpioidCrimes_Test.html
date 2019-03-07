@@ -1,0 +1,249 @@
+<html>
+
+<head>
+<style type="text/css">
+.knitr .inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage .left {
+  text-align: left;
+}
+.rimage .right {
+  text-align: right;
+}
+.rimage .center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>MC 2018 Opioid Crimes</title>
+</head>
+
+<body>
+
+
+<p>MC 2018 Opioid Crimes
+This data was downloaded off of data.montgomerycountymd.gov
+The following will show the dataset before and after cleaning.</p>
+
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">library</span><span class="hl std">(readxl)</span>
+<span class="hl std">Opioid_Crime_Incidents_Jan_1_2017_Present</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">read_excel</span><span class="hl std">(</span><span class="hl str">&quot;Opioid_Crime_Incidents__Jan_1_2017-Present.xlsx&quot;</span><span class="hl std">)</span>
+<span class="hl kwd">library</span><span class="hl std">(dplyr)</span>
+</pre></div>
+<div class="message"><pre class="knitr r">## 
+## Attaching package: 'dplyr'
+</pre></div>
+<div class="message"><pre class="knitr r">## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+</pre></div>
+<div class="message"><pre class="knitr r">## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">head</span><span class="hl std">(Opioid_Crime_Incidents_Jan_1_2017_Present)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## # A tibble: 6 x 33
+##   Area   KEY_ID `Incident ID` `Offence Code` `CR Number`
+##   &lt;chr&gt;   &lt;dbl&gt;         &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Mont… 2.01e12     201149522           3512   170526679
+## 2 Mont… 2.01e12     201225909           3520   190005905
+## 3 Mont… 2.01e12     201219070           3512   180062760
+## 4 Mont… 2.01e12     201210515           3510   180051622
+## 5 Mont… 2.01e12     201223469           3512   190002607
+## 6 Mont… 2.01e12     201214813           3512   180057400
+## # … with 28 more variables: `Dispatch Date/Time` &lt;dttm&gt;, `NIBRS
+## #   Code` &lt;chr&gt;, Victims &lt;dbl&gt;, `Crime Name1` &lt;chr&gt;, `Crime Name2` &lt;chr&gt;,
+## #   `Crime Name3` &lt;chr&gt;, `Police District Name` &lt;chr&gt;,
+## #   Block_Address &lt;chr&gt;, City &lt;chr&gt;, State &lt;chr&gt;, `Zip Code` &lt;dbl&gt;,
+## #   Agency &lt;chr&gt;, Place &lt;chr&gt;, Sector &lt;chr&gt;, Beat &lt;chr&gt;, PRA &lt;dbl&gt;,
+## #   `Address Number` &lt;dbl&gt;, `Street Prefix` &lt;chr&gt;, `Street Name` &lt;chr&gt;,
+## #   `Street Suffix` &lt;chr&gt;, `Street Type` &lt;chr&gt;, `Start Date/Time` &lt;dttm&gt;,
+## #   `End Date/Time` &lt;dttm&gt;, Latitude &lt;dbl&gt;, `Police District
+## #   Number` &lt;chr&gt;, Longitude &lt;dbl&gt;, `Report Date/Time` &lt;dttm&gt;,
+## #   Location &lt;chr&gt;
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">tail</span><span class="hl std">(Opioid_Crime_Incidents_Jan_1_2017_Present)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## # A tibble: 6 x 33
+##   Area   KEY_ID `Incident ID` `Offence Code` `CR Number`
+##   &lt;chr&gt;   &lt;dbl&gt;         &lt;dbl&gt;          &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Mont… 2.01e12     201220159           3522   180064084
+## 2 Mont… 2.01e12     201220204           3512   180064226
+## 3 Mont… 2.01e12     201219726           3522   180063249
+## 4 Mont… 2.01e12     201216962           3522   180060113
+## 5 Mont… 2.01e12     201218182           3523   180061524
+## 6 Mont… 2.01e12     201220667           3522   180064820
+## # … with 28 more variables: `Dispatch Date/Time` &lt;dttm&gt;, `NIBRS
+## #   Code` &lt;chr&gt;, Victims &lt;dbl&gt;, `Crime Name1` &lt;chr&gt;, `Crime Name2` &lt;chr&gt;,
+## #   `Crime Name3` &lt;chr&gt;, `Police District Name` &lt;chr&gt;,
+## #   Block_Address &lt;chr&gt;, City &lt;chr&gt;, State &lt;chr&gt;, `Zip Code` &lt;dbl&gt;,
+## #   Agency &lt;chr&gt;, Place &lt;chr&gt;, Sector &lt;chr&gt;, Beat &lt;chr&gt;, PRA &lt;dbl&gt;,
+## #   `Address Number` &lt;dbl&gt;, `Street Prefix` &lt;chr&gt;, `Street Name` &lt;chr&gt;,
+## #   `Street Suffix` &lt;chr&gt;, `Street Type` &lt;chr&gt;, `Start Date/Time` &lt;dttm&gt;,
+## #   `End Date/Time` &lt;dttm&gt;, Latitude &lt;dbl&gt;, `Police District
+## #   Number` &lt;chr&gt;, Longitude &lt;dbl&gt;, `Report Date/Time` &lt;dttm&gt;,
+## #   Location &lt;chr&gt;
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">str</span><span class="hl std">(Opioid_Crime_Incidents_Jan_1_2017_Present)</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## Classes 'tbl_df', 'tbl' and 'data.frame':	369 obs. of  33 variables:
+##  $ Area                  : chr  &quot;Montgomery County, MD&quot; &quot;Montgomery County, MD&quot; &quot;Montgomery County, MD&quot; &quot;Montgomery County, MD&quot; ...
+##  $ KEY_ID                : num  2.01e+12 2.01e+12 2.01e+12 2.01e+12 2.01e+12 ...
+##  $ Incident ID           : num  2.01e+08 2.01e+08 2.01e+08 2.01e+08 2.01e+08 ...
+##  $ Offence Code          : num  3512 3520 3512 3510 3512 ...
+##  $ CR Number             : num  1.71e+08 1.90e+08 1.80e+08 1.80e+08 1.90e+08 ...
+##  $ Dispatch Date/Time    : POSIXct, format: &quot;2017-08-24 19:50:00&quot; &quot;2019-02-06 13:55:00&quot; ...
+##  $ NIBRS Code            : chr  &quot;35A&quot; &quot;35A&quot; &quot;35A&quot; &quot;35A&quot; ...
+##  $ Victims               : num  1 1 1 1 1 1 1 1 1 1 ...
+##  $ Crime Name1           : chr  &quot;Crime Against Society&quot; &quot;Crime Against Society&quot; &quot;Crime Against Society&quot; &quot;Crime Against Society&quot; ...
+##  $ Crime Name2           : chr  &quot;Drug/Narcotic Violations&quot; &quot;Drug/Narcotic Violations&quot; &quot;Drug/Narcotic Violations&quot; &quot;Drug/Narcotic Violations&quot; ...
+##  $ Crime Name3           : chr  &quot;DRUGS - HEROIN - POSSESS&quot; &quot;DRUGS - OPIUM OR DERIVATIVE - SELL&quot; &quot;DRUGS - HEROIN - POSSESS&quot; &quot;DRUGS - HEROIN - SELL&quot; ...
+##  $ Police District Name  : chr  &quot;WHEATON&quot; &quot;ROCKVILLE&quot; &quot;WHEATON&quot; &quot;BETHESDA&quot; ...
+##  $ Block_Address         : chr  &quot;22300  GEORGIA AVE&quot; &quot;600  HUNGERFORD DR&quot; &quot;12700  HOLDRIDGE RD&quot; NA ...
+##  $ City                  : chr  &quot;BROOKEVILLE&quot; &quot;ROCKVILLE&quot; &quot;SILVER SPRING&quot; &quot;SILVER SPRING&quot; ...
+##  $ State                 : chr  &quot;MD&quot; &quot;MD&quot; &quot;MD&quot; &quot;MD&quot; ...
+##  $ Zip Code              : num  20833 20850 20906 20910 20872 ...
+##  $ Agency                : chr  &quot;MCPD&quot; &quot;MCPD&quot; &quot;MCPD&quot; &quot;MCPD&quot; ...
+##  $ Place                 : chr  &quot;Street - In vehicle&quot; &quot;Parking Lot - Commercial&quot; &quot;Residence - Single Family&quot; &quot;Street - In vehicle&quot; ...
+##  $ Sector                : chr  &quot;J&quot; &quot;A&quot; &quot;K&quot; &quot;D&quot; ...
+##  $ Beat                  : chr  &quot;4J2&quot; &quot;1A3&quot; &quot;4K2&quot; &quot;2D1&quot; ...
+##  $ PRA                   : num  408 278 335 517 481 615 447 777 549 425 ...
+##  $ Address Number        : num  22300 600 12700 NA 10500 26100 NA NA NA 200 ...
+##  $ Street Prefix         : chr  NA NA NA NA ...
+##  $ Street Name           : chr  &quot;GEORGIA&quot; &quot;HUNGERFORD&quot; &quot;HOLDRIDGE&quot; &quot;16TH&quot; ...
+##  $ Street Suffix         : chr  NA NA NA NA ...
+##  $ Street Type           : chr  &quot;AVE&quot; &quot;DR&quot; &quot;RD&quot; &quot;ST&quot; ...
+##  $ Start Date/Time       : POSIXct, format: &quot;2017-08-24 19:50:00&quot; &quot;2019-02-06 13:55:00&quot; ...
+##  $ End Date/Time         : POSIXct, format: NA NA ...
+##  $ Latitude              : num  39.2 39.1 39.1 39 39.3 ...
+##  $ Police District Number: chr  &quot;4D&quot; &quot;1D&quot; &quot;4D&quot; &quot;2D&quot; ...
+##  $ Longitude             : num  -77.1 -77.2 -77.1 -77 -77.2 ...
+##  $ Report Date/Time      : POSIXct, format: &quot;2017-08-24 20:05:00&quot; &quot;2019-02-07 10:59:00&quot; ...
+##  $ Location              : chr  &quot;(39.221583927184192, -77.05984530260946)&quot; &quot;(39.092058810228465, -77.153305133988653)&quot; &quot;(39.063859984828461, -77.059717768612146)&quot; &quot;(38.9945365, -77.036322)&quot; ...
+</pre></div>
+</div></div>
+
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">MCOpioid</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">select</span><span class="hl std">(Opioid_Crime_Incidents_Jan_1_2017_Present,</span> <span class="hl str">&quot;Incident ID&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;Offence Code&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;Crime Name3&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;Zip Code&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;Start Date/Time&quot;</span><span class="hl std">)</span>
+<span class="hl std">MCOpioid</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## # A tibble: 369 x 5
+##    `Incident ID` `Offence Code` `Crime Name3` `Zip Code`
+##            &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;              &lt;dbl&gt;
+##  1     201149522           3512 DRUGS - HERO…      20833
+##  2     201225909           3520 DRUGS - OPIU…      20850
+##  3     201219070           3512 DRUGS - HERO…      20906
+##  4     201210515           3510 DRUGS - HERO…      20910
+##  5     201223469           3512 DRUGS - HERO…      20872
+##  6     201214813           3512 DRUGS - HERO…      20872
+##  7     201218359           3522 DRUGS - OPIU…      20874
+##  8     201223976           3512 DRUGS - HERO…      20906
+##  9     201144509           3522 DRUGS - OPIU…      20878
+## 10     201225946           3512 DRUGS - HERO…      20879
+## # … with 359 more rows, and 1 more variable: `Start Date/Time` &lt;dttm&gt;
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">MCOpioid</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">rename</span><span class="hl std">(MCOpioid,</span> <span class="hl kwc">Year</span> <span class="hl std">=</span> <span class="hl str">&quot;Start Date/Time&quot;</span><span class="hl std">,</span> <span class="hl kwc">Crime</span> <span class="hl std">=</span> <span class="hl str">&quot;Crime Name3&quot;</span><span class="hl std">)</span>
+<span class="hl std">MCOpioid</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## # A tibble: 369 x 5
+##    `Incident ID` `Offence Code` Crime        `Zip Code` Year               
+##            &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;dttm&gt;             
+##  1     201149522           3512 DRUGS - HER…      20833 2017-08-24 19:50:00
+##  2     201225909           3520 DRUGS - OPI…      20850 2019-02-06 13:55:00
+##  3     201219070           3512 DRUGS - HER…      20906 2018-12-16 07:10:00
+##  4     201210515           3510 DRUGS - HER…      20910 2018-10-15 13:25:00
+##  5     201223469           3512 DRUGS - HER…      20872 2019-01-16 20:23:00
+##  6     201214813           3512 DRUGS - HER…      20872 2018-11-15 19:26:00
+##  7     201218359           3522 DRUGS - OPI…      20874 2018-12-05 21:06:00
+##  8     201223976           3512 DRUGS - HER…      20906 2019-01-22 17:08:00
+##  9     201144509           3522 DRUGS - OPI…      20878 2017-07-21 22:54:00
+## 10     201225946           3512 DRUGS - HER…      20879 2019-02-05 22:14:00
+## # … with 359 more rows
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">MCOpioid</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">mutate</span><span class="hl std">(MCOpioid,</span> <span class="hl kwc">Year</span> <span class="hl std">=</span> <span class="hl kwd">format</span><span class="hl std">(MCOpioid</span><span class="hl opt">$</span><span class="hl str">'Year'</span><span class="hl std">,</span> <span class="hl kwc">format</span> <span class="hl std">=</span> <span class="hl str">&quot;%Y&quot;</span><span class="hl std">))</span>
+<span class="hl std">MCOpioid</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## # A tibble: 369 x 5
+##    `Incident ID` `Offence Code` Crime                      `Zip Code` Year 
+##            &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt; &lt;chr&gt;
+##  1     201149522           3512 DRUGS - HEROIN - POSSESS        20833 2017 
+##  2     201225909           3520 DRUGS - OPIUM OR DERIVATI…      20850 2019 
+##  3     201219070           3512 DRUGS - HEROIN - POSSESS        20906 2018 
+##  4     201210515           3510 DRUGS - HEROIN - SELL           20910 2018 
+##  5     201223469           3512 DRUGS - HEROIN - POSSESS        20872 2019 
+##  6     201214813           3512 DRUGS - HEROIN - POSSESS        20872 2018 
+##  7     201218359           3522 DRUGS - OPIUM OR DERIVATI…      20874 2018 
+##  8     201223976           3512 DRUGS - HEROIN - POSSESS        20906 2019 
+##  9     201144509           3522 DRUGS - OPIUM OR DERIVATI…      20878 2017 
+## 10     201225946           3512 DRUGS - HEROIN - POSSESS        20879 2019 
+## # … with 359 more rows
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl std">MCOpioid</span> <span class="hl kwb">&lt;-</span> <span class="hl kwd">filter</span><span class="hl std">(MCOpioid, Year</span> <span class="hl opt">==</span> <span class="hl num">2018</span><span class="hl std">)</span>
+<span class="hl std">MCOpioid</span>
+</pre></div>
+<div class="output"><pre class="knitr r">## # A tibble: 292 x 5
+##    `Incident ID` `Offence Code` Crime                      `Zip Code` Year 
+##            &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt; &lt;chr&gt;
+##  1     201219070           3512 DRUGS - HEROIN - POSSESS        20906 2018 
+##  2     201210515           3510 DRUGS - HEROIN - SELL           20910 2018 
+##  3     201214813           3512 DRUGS - HEROIN - POSSESS        20872 2018 
+##  4     201218359           3522 DRUGS - OPIUM OR DERIVATI…      20874 2018 
+##  5     201207260           3522 DRUGS - OPIUM OR DERIVATI…      20866 2018 
+##  6     201198147           3520 DRUGS - OPIUM OR DERIVATI…      20906 2018 
+##  7     201198147           3522 DRUGS - OPIUM OR DERIVATI…      20906 2018 
+##  8     201210467           3512 DRUGS - HEROIN - POSSESS        20906 2018 
+##  9     201203874           3522 DRUGS - OPIUM OR DERIVATI…      20832 2018 
+## 10     201206873           3522 DRUGS - OPIUM OR DERIVATI…      20879 2018 
+## # … with 282 more rows
+</pre></div>
+</div></div>
+
+</body>
+</html>
